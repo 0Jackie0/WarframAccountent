@@ -13,9 +13,6 @@ class Item (itemId: Int, itemName: String, itemNumber: Int = 0, itemEPrice: Int 
 	var ePrice: Int = itemEPrice
 	var bPrice: Int = itemBPrice
 
-
-
-
 	constructor() : this(0, "")
 
 	constructor(newName: String) : this(0, newName)

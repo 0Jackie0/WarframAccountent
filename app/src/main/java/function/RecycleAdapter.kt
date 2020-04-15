@@ -1,14 +1,14 @@
 package function
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.recyclerview.widget.RecyclerView
+import com.example.warframeaccountant.AddActivity
 import com.example.warframeaccountant.HomeActivity
 import com.example.warframeaccountant.R
 import domin.Item
@@ -17,6 +17,7 @@ import domin.Item
 class RecycleAdapter(guiClassContext: Context, newItemList: ArrayList<Item>) : RecyclerView.Adapter<RecycleAdapter.ItemViewHolder>()
 {
 	val itemList = newItemList
+	private val ADD_PAGE_REQUEST_CODE = 1
 
 	private val guiClass : Context = guiClassContext
 
@@ -92,24 +93,26 @@ class RecycleAdapter(guiClassContext: Context, newItemList: ArrayList<Item>) : R
 			addFunction(holder, position)
 		}
 
-
 		holder.itemRemove.setOnClickListener{
 			removeFunction(holder, position)
 		}
-	}
 
+		holder.itemImage.setOnClickListener{
+			editFunction(position)
+		}
+		holder.itemInfo.setOnClickListener{
+			editFunction(position)
+		}
+	}
 	private fun addFunction (holder: ItemViewHolder, position: Int)
 	{
 		var quantity: Int = holder.itemQuantity.text.toString().toInt()
 		quantity ++
 		holder.itemQuantity.text = quantity.toString()
 
-		itemList[position].number = quantity
-
 		(guiClass as HomeActivity).updateSumPrice(itemList[position].ePrice)
-		(guiClass as HomeActivity).updateSumQuantity(1)
+		guiClass.updateSumQuantity(position, 1)
 	}
-
 	private fun removeFunction (holder: ItemViewHolder, position: Int)
 	{
 		var quantity: Int = holder.itemQuantity.text.toString().toInt()
@@ -118,10 +121,8 @@ class RecycleAdapter(guiClassContext: Context, newItemList: ArrayList<Item>) : R
 			quantity --
 			holder.itemQuantity.text = quantity.toString()
 
-			itemList[position].number = quantity
-
-			(guiClass as HomeActivity).updateSumPrice(itemList[position].ePrice)
-			(guiClass as HomeActivity).updateSumQuantity(-1)
+			(guiClass as HomeActivity).updateSumPrice(-1 * itemList[position].ePrice)
+			guiClass.updateSumQuantity(position, -1)
 		}
 		else
 		{
@@ -129,6 +130,10 @@ class RecycleAdapter(guiClassContext: Context, newItemList: ArrayList<Item>) : R
 		}
 	}
 
+	private fun editFunction (index: Int)
+	{
+		(guiClass as HomeActivity).startEditItem(index)
+	}
 
 	class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 	{
@@ -139,6 +144,7 @@ class RecycleAdapter(guiClassContext: Context, newItemList: ArrayList<Item>) : R
 		val itemBPrice: TextView = itemView.findViewById(R.id.basePriceText)
 		val itemAdd: Button = itemView.findViewById(R.id.increaseButton)
 		val itemRemove: Button = itemView.findViewById(R.id.decreaseButton)
+		val itemInfo: TableLayout = itemView.findViewById(R.id.itemInfoArea)
 	}
 }
 

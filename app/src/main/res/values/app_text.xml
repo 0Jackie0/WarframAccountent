@@ -3,14 +3,24 @@
     <string name="totalPriceTitle">Total\nPrice: </string>
     <string name="totalNumberTitle">Total\nNumber: </string>
     <string name="totalStarPriceTitle">Total\nStar Price: </string>
+
     <string name="addNewItem">Add New Item</string>
     <string name="searchButtonText">Search</string>
     <string name="itemName">Item Name</string>
+
     <string name="filter">Filter by</string>
     <string name="order">Order by</string>
+
     <string name="quantity">Quantity: </string>
     <string name="expectedPrice">Exp Price: </string>
     <string name="basePrice">Base Price: </string>
+
     <string name="add">Add</string>
     <string name="remove">Remove</string>
+
+    <string name="basePriceTag">Base Price</string>
+    <string name="expectedPriceTag">Expected Price</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
 </resources>
