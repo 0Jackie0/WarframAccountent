@@ -11,6 +11,7 @@
     <string name="filter">Filter by</string>
     <string name="order">Order by</string>
 
+    <string name="type">Item Type: </string>
     <string name="quantity">Quantity: </string>
     <string name="expectedPrice">Exp Price: </string>
     <string name="basePrice">Base Price: </string>

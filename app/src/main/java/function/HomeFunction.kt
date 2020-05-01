@@ -3,34 +3,78 @@ package function
 import android.content.ClipData
 import android.content.Context
 import android.util.Log
+import androidx.room.Room
+import database.DatabaseConnection
+import database.ItemRepo
 import domin.Item
+import domin.Type
 
 class HomeFunction(guiClassContext: Context, guiItemList: ArrayList<Item> = ArrayList())
 {
 	private var guiClass = guiClassContext
-	var itemList: ArrayList<Item> = guiItemList
-		private set
+	private val itemRepo = DatabaseConnection(guiClass).getItemRepo()
+	private val typeRepo = DatabaseConnection(guiClass).getTypeRepo()
 
-	fun changeItemQuantity (index: Int, amount: Int)
+
+	fun getAllItemList(order: String = ""): ArrayList<Item>
 	{
-		itemList[index].number += amount
+		if (order.equals("name", true))
+		{
+			return itemRepo.getAllItemOrderName() as ArrayList<Item>
+		}
+		else if (order.equals("quantity", true))
+		{
+			return itemRepo.getAllItemOrderQuantity() as ArrayList<Item>
+		}
+		else
+		{
+			return itemRepo.getAllItem() as ArrayList<Item>
+		}
 	}
 
-	fun removeItem(index: Int)
+	fun getFilterItemList (typeName: String, order: String): ArrayList<Item>
 	{
-		itemList.removeAt(index)
+		if (order.equals("name", true))
+		{
+			return itemRepo.getFilterItemName(typeRepo.getTypeByName(typeName).typeId) as ArrayList<Item>
+		}
+		else if (order.equals("quantity", true))
+		{
+			return itemRepo.getFilterItemQuantity(typeRepo.getTypeByName(typeName).typeId) as ArrayList<Item>
+		}
+		else
+		{
+			return itemRepo.getAllItem() as ArrayList<Item>
+		}
+	}
+
+	fun getTargetItem (id: Int): Item
+	{
+		return itemRepo.getItem(id)
+	}
+
+	fun changeItemQuantity (id: Int, amount: Int)
+	{
+		itemRepo.changeItemQuantity(id, amount)
+	}
+
+	fun removeItem(id: Int)
+	{
+		itemRepo.removeItem(id)
 	}
 
 	fun addItem (newItem: Item)
 	{
-		itemList.add(newItem)
+		itemRepo.insert(newItem)
 	}
 
-	fun editItem(targetItem: Item, index: Int)
+	fun editItem(targetItem: Item)
 	{
-		itemList[index].name = targetItem.name
-		itemList[index].number = targetItem.number
-		itemList[index].ePrice = targetItem.ePrice
-		itemList[index].bPrice = targetItem.bPrice
+		itemRepo.update(targetItem)
+	}
+
+	fun getItemTypeList(): List<Type>
+	{
+		return typeRepo.getAllType()
 	}
 }

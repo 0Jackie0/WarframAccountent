@@ -1,35 +1,30 @@
 package domin
 
-class Item (itemId: Int, itemName: String, itemNumber: Int = 0, itemEPrice: Int = 0, itemBPrice: Int = 0)
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.ForeignKey.CASCADE
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "item")
+@ForeignKey(entity = Type::class, parentColumns = ["typeId"], childColumns = ["type"], onDelete = CASCADE)
+class Item (
+		@PrimaryKey(autoGenerate = true)
+		var itemId: Int = 0,
+
+		@ColumnInfo(name = "name")
+		var name: String,
+
+		@ColumnInfo(name = "type")
+		var type: Int,
+
+		@ColumnInfo(name = "quantity")
+		var number: Int = 0,
+		@ColumnInfo(name = "expected_price")
+		var ePrice: Int = 0,
+		@ColumnInfo(name = "bass_price")
+		var bPrice: Int = 0
+	)
 {
-	var id: Int = itemId
-		private set(newId)
-		{
-			id = newId
-		}
-
-	var name: String = itemName
-	var number: Int = itemNumber
-	var ePrice: Int = itemEPrice
-	var bPrice: Int = itemBPrice
-
-	constructor() : this(0, "")
-
-	constructor(newName: String) : this(0, newName)
-
-	constructor(newName: String, itemNumber: Int, itemEPrice: Int, itemBPrice: Int) : this(0, newName, itemNumber, itemEPrice, itemBPrice)
-
-
-	/**
-	 * This method will check the input price is lower than base price or not
-	 */
-	fun checkPrice(targetPrice: Int) : Boolean
-	{
-		if (targetPrice < bPrice)
-		{
-			return false
-		}
-		return true
-	}
-
+	constructor(): this( 0, "", 0, 0, 0, 0)
 }

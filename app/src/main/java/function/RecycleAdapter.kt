@@ -2,6 +2,7 @@ package function
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -98,10 +99,10 @@ class RecycleAdapter(guiClassContext: Context, newItemList: ArrayList<Item>) : R
 		}
 
 		holder.itemImage.setOnClickListener{
-			editFunction(position)
+			editFunction(itemList[position].itemId)
 		}
 		holder.itemInfo.setOnClickListener{
-			editFunction(position)
+			editFunction(itemList[position].itemId)
 		}
 	}
 	private fun addFunction (holder: ItemViewHolder, position: Int)
@@ -111,7 +112,7 @@ class RecycleAdapter(guiClassContext: Context, newItemList: ArrayList<Item>) : R
 		holder.itemQuantity.text = quantity.toString()
 
 		(guiClass as HomeActivity).updateSumPrice(itemList[position].ePrice)
-		guiClass.updateSumQuantity(position, 1)
+		guiClass.updateSumQuantity(itemList[position].itemId, 1)
 	}
 	private fun removeFunction (holder: ItemViewHolder, position: Int)
 	{
@@ -122,7 +123,7 @@ class RecycleAdapter(guiClassContext: Context, newItemList: ArrayList<Item>) : R
 			holder.itemQuantity.text = quantity.toString()
 
 			(guiClass as HomeActivity).updateSumPrice(-1 * itemList[position].ePrice)
-			guiClass.updateSumQuantity(position, -1)
+			guiClass.updateSumQuantity(itemList[position].itemId, -1)
 		}
 		else
 		{
@@ -130,9 +131,9 @@ class RecycleAdapter(guiClassContext: Context, newItemList: ArrayList<Item>) : R
 		}
 	}
 
-	private fun editFunction (index: Int)
+	private fun editFunction (id: Int)
 	{
-		(guiClass as HomeActivity).startEditItem(index)
+		(guiClass as HomeActivity).startEditItem(id)
 	}
 
 	class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
