@@ -6,11 +6,12 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "type")
 class Type (
-		@PrimaryKey(autoGenerate = true)
+		@PrimaryKey(autoGenerate = false)
 		var typeId: Int,
 
 		@ColumnInfo(name = "type_name")
 		var name: String
 	)
 {
+	constructor(): this(0, "")
 }

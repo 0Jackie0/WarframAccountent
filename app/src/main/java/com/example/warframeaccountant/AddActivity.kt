@@ -2,22 +2,27 @@ package com.example.warframeaccountant
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
 import android.widget.*
 import database.DatabaseConnection
+import function.AddFunction
 
 class AddActivity : AppCompatActivity()
 {
+	val REQUEST_IMAGE_CAPTURE = 1
 	private var edit: Boolean = false
 	private var id: Int = -1
-	private val typeRepo = DatabaseConnection(this).getTypeRepo()
+
+	private lateinit var addFunction: AddFunction
 
 	fun saveItem (saveButton: View)
 	{
-		val targetType = typeRepo.getTypeByName(findViewById<Spinner>(R.id.itemTypeDropdown).selectedItem.toString())
+		val targetType = addFunction.getTargetType(findViewById<Spinner>(R.id.itemTypeDropdown).selectedItem.toString())
 
 		val returnIntent = Intent()
 		if (edit)
@@ -35,6 +40,8 @@ class AddActivity : AppCompatActivity()
 		returnIntent.putExtra("ePrice", findViewById<TextView>(R.id.expectedPriceText).text.toString().toInt())
 		returnIntent.putExtra("bPrice", findViewById<TextView>(R.id.basePriceText).text.toString().toInt())
 		returnIntent.putExtra("type", targetType.typeId)
+
+		findViewById<ImageView>(R.id.itemImage)
 
 
 		setResult(Activity.RESULT_OK, returnIntent)
@@ -58,10 +65,17 @@ class AddActivity : AppCompatActivity()
 		this.finish()
 	}
 
+	fun takeImage(imageButton: View)
+	{
+		dispatchTakePictureIntent()
+	}
+
 	override fun onCreate(savedInstanceState: Bundle?)
 	{
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_add)
+
+		addFunction = AddFunction(this)
 
 		val intentThis = intent
 
@@ -73,10 +87,10 @@ class AddActivity : AppCompatActivity()
 			edit = true
 			id = intentThis.getIntExtra("id", -1)
 
-			findViewById<TextView>(R.id.itemNameText).text = intentThis.getStringExtra("name")
-			findViewById<TextView>(R.id.quantityText).text = intentThis.getIntExtra("quantity", 0).toString()
-			findViewById<TextView>(R.id.expectedPriceText).text = intentThis.getIntExtra("ePrice", 0).toString()
-			findViewById<TextView>(R.id.basePriceText).text = intentThis.getIntExtra("bPrice", 0).toString()
+			findViewById<EditText>(R.id.itemNameText).setText(intentThis.getStringExtra("name"))
+			findViewById<EditText>(R.id.quantityText).setText(intentThis.getIntExtra("quantity", 0).toString())
+			findViewById<EditText>(R.id.expectedPriceText).setText(intentThis.getIntExtra("ePrice", 0).toString())
+			findViewById<EditText>(R.id.basePriceText).setText(intentThis.getIntExtra("bPrice", 0).toString())
 			if (targetIndex != -1)
 			{
 				findViewById<Spinner>(R.id.itemTypeDropdown).setSelection(targetIndex)
@@ -92,7 +106,7 @@ class AddActivity : AppCompatActivity()
 	private fun setupItemType (target: Int): Int
 	{
 		val itemTypeContent = ArrayList<String>()
-		val allTypeList = typeRepo.getAllType()
+		val allTypeList = addFunction.getTypeList()
 		var targetIndex: Int = -1
 
 		for (index in allTypeList.indices)
@@ -109,6 +123,25 @@ class AddActivity : AppCompatActivity()
 		dropdownList.adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item,itemTypeContent)
 
 		return targetIndex
+	}
+
+
+
+	private fun dispatchTakePictureIntent() {
+		Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+			takePictureIntent.resolveActivity(packageManager)?.also {
+				startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+			}
+		}
+	}
+
+	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+		if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null)
+		{
+			val imageBitmap = data.extras?.get("data") as Bitmap
+
+			findViewById<ImageView>(R.id.itemImage).setImageBitmap(imageBitmap)
+		}
 	}
 }
 

@@ -10,16 +10,20 @@ interface ItemRepo
 	fun getAllItem(): List<Item>
 	@Query("Select * from item ORDER BY name")
 	fun getAllItemOrderName(): List<Item>
-	@Query("Select * from item ORDER BY quantity")
+	@Query("Select * from item ORDER BY quantity DESC")
 	fun getAllItemOrderQuantity(): List<Item>
 
+	@Query("Select * from item where name like :itemName ORDER BY name")
+	fun searchItemOrderName(itemName: String): List<Item>
+	@Query("Select * from item where name like :itemName ORDER BY quantity DESC")
+	fun searchItemOrderQuantity(itemName: String): List<Item>
 
 	@Query("Select * from item where itemId = :id")
 	fun getItem(id: Int): Item
 
 	@Query("Select * from item where type = :typeId ORDER BY name")
 	fun getFilterItemName(typeId: Int): List<Item>
-	@Query("Select * from item where type = :typeId ORDER BY quantity")
+	@Query("Select * from item where type = :typeId ORDER BY quantity DESC")
 	fun getFilterItemQuantity(typeId: Int): List<Item>
 
 	@Query("Delete from item where itemId = :id")
@@ -35,5 +39,5 @@ interface ItemRepo
 	fun update(vararg targetItem:Item)
 
 	@Delete
-	fun delete(targetItem:Item)
+	fun delete(vararg targetItem:Item)
 }

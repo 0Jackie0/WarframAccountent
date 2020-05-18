@@ -1,15 +1,17 @@
 package domin
 
+import android.graphics.Bitmap
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
 import androidx.room.PrimaryKey
+import com.example.warframeaccountant.R
 
 @Entity(tableName = "item")
 @ForeignKey(entity = Type::class, parentColumns = ["typeId"], childColumns = ["type"], onDelete = CASCADE)
 class Item (
-		@PrimaryKey(autoGenerate = true)
+		@PrimaryKey(autoGenerate = false)
 		var itemId: Int = 0,
 
 		@ColumnInfo(name = "name")
@@ -26,5 +28,5 @@ class Item (
 		var bPrice: Int = 0
 	)
 {
-	constructor(): this( 0, "", 0, 0, 0, 0)
+	constructor(): this(0, "", 0, 0, 0, 0)
 }
