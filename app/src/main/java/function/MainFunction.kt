@@ -48,6 +48,9 @@ class MainFunction(guiContext: Context)
 
 	fun itemTypeListCallback(itemList: ArrayList<Type>, success: Boolean)
 	{
+		val serverCommunicationFile = guiCass.getSharedPreferences("com.example.warframeaccountant", Context.MODE_PRIVATE)
+		serverCommunicationFile.edit().putBoolean("Mode", success).apply()
+
 		if(success)
 		{
 			for (type in itemList)

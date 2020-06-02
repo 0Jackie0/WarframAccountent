@@ -305,6 +305,7 @@ class HomeActivity : AppCompatActivity()
 		newIntent.putExtra("ePrice", targetItem.ePrice)
 		newIntent.putExtra("bPrice", targetItem.bPrice)
 		newIntent.putExtra("type", targetItem.type)
+		newIntent.putExtra("imageString", targetItem.imageString)
 
 		startActivityForResult(newIntent, ADD_PAGE_REQUEST_CODE)
 	}
@@ -330,6 +331,9 @@ class HomeActivity : AppCompatActivity()
 				newItem.ePrice = data.getIntExtra("ePrice", 0)
 				newItem.bPrice = data.getIntExtra("bPrice", 0)
 				newItem.type = data.getIntExtra("type", 0)
+				newItem.imageString = data.getStringExtra("imageString")
+
+//				Log.i("Image String", newItem.imageString)
 
 				homeFunction.addItem(newItem)
 			}
@@ -343,6 +347,7 @@ class HomeActivity : AppCompatActivity()
 				targetItem.ePrice = data.getIntExtra("ePrice", 0)
 				targetItem.bPrice = data.getIntExtra("bPrice", 0)
 				targetItem.type = data.getIntExtra("type", 0)
+				targetItem.imageString = data.getStringExtra("imageString")
 
 				homeFunction.editItem(targetItem)
 

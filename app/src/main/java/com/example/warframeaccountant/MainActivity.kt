@@ -55,20 +55,4 @@ class MainActivity : AppCompatActivity()
 		Toast.makeText(this, "--Failed to start the app--", Toast.LENGTH_LONG).show()
 		this.finish()
 	}
-
-//	private fun setup ()
-//	{
-//		val typeRepo = DatabaseConnection(this).getTypeRepo()
-//		if (typeRepo.getAllType().isEmpty())
-//		{
-//			typeRepo.insert(Type(0,"Warframe - Blueprint"))
-//			typeRepo.insert(Type(0,"Warframe - Parts"))
-//			typeRepo.insert(Type(0,"Primary - Blueprint"))
-//			typeRepo.insert(Type(0,"Primary - Parts"))
-//			typeRepo.insert(Type(0,"Secondary - Blueprint"))
-//			typeRepo.insert(Type(0,"Secondary - Parts"))
-//			typeRepo.insert(Type(0,"Melee - Blueprint"))
-//			typeRepo.insert(Type(0,"Melee - Parts"))
-//		}
-//	}
 }

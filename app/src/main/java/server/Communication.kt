@@ -29,7 +29,7 @@ class Communication(guiContext: Context)
 			JsonArrayRequest(Request.Method.GET, "${SERVER_URL}item", null, Response.Listener { response ->
 				try
 				{
-					Log.i("Item List", "${response.toString()}")
+//					Log.i("Item List", "${response.toString()}")
 					val itemArray = ArrayList<Item>()
 
 					for (index in 0 until response.length())
@@ -43,6 +43,7 @@ class Communication(guiContext: Context)
 						newItem.name = jsonObject.getString("name")
 						newItem.ePrice = jsonObject.getInt("eprice")
 						newItem.bPrice = jsonObject.getInt("bprice")
+						newItem.imageString = jsonObject.getString("imageString")
 
 						itemArray.add(newItem)
 					}
@@ -64,7 +65,7 @@ class Communication(guiContext: Context)
 			JsonArrayRequest(Request.Method.GET, "${SERVER_URL}type", null, Response.Listener { response ->
 				try
 				{
-					Log.i("Type List", "${response.toString()}")
+//					Log.i("Type List", "${response.toString()}")
 
 					val typeArray = ArrayList<Type>()
 
@@ -126,6 +127,7 @@ class Communication(guiContext: Context)
 			newJson.put("name", newItem.name)
 			newJson.put("eprice", newItem.ePrice)
 			newJson.put("bprice", newItem.bPrice)
+			newJson.put("imageString", newItem.imageString)
 		}
 		catch (e: JSONException)
 		{
@@ -165,6 +167,7 @@ class Communication(guiContext: Context)
 				newJson.put("name", item.name)
 				newJson.put("eprice", item.ePrice)
 				newJson.put("bprice", item.bPrice)
+				newJson.put("imageString", item.imageString)
 
 				itemListJsonArray.put(newJson)
 			}

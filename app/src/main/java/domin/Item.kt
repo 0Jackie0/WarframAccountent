@@ -25,7 +25,10 @@ class Item (
 		@ColumnInfo(name = "expected_price")
 		var ePrice: Int = 0,
 		@ColumnInfo(name = "bass_price")
-		var bPrice: Int = 0
+		var bPrice: Int = 0,
+
+		@ColumnInfo(name = "image")
+		var imageString: String = ""
 	)
 {
 	constructor(): this(0, "", 0, 0, 0, 0)

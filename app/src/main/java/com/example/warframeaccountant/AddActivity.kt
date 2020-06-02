@@ -3,20 +3,28 @@ package com.example.warframeaccountant
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.opengl.Visibility
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.*
 import database.DatabaseConnection
 import function.AddFunction
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.util.*
+import kotlin.collections.ArrayList
 
 class AddActivity : AppCompatActivity()
 {
 	val REQUEST_IMAGE_CAPTURE = 1
 	private var edit: Boolean = false
 	private var id: Int = -1
+	private var imageString: String = ""
 
 	private lateinit var addFunction: AddFunction
 
@@ -40,6 +48,7 @@ class AddActivity : AppCompatActivity()
 		returnIntent.putExtra("ePrice", findViewById<TextView>(R.id.expectedPriceText).text.toString().toInt())
 		returnIntent.putExtra("bPrice", findViewById<TextView>(R.id.basePriceText).text.toString().toInt())
 		returnIntent.putExtra("type", targetType.typeId)
+		returnIntent.putExtra("imageString", imageString)
 
 		findViewById<ImageView>(R.id.itemImage)
 
@@ -87,6 +96,20 @@ class AddActivity : AppCompatActivity()
 			edit = true
 			id = intentThis.getIntExtra("id", -1)
 
+			val imageByteArray = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+			{
+				Base64.getDecoder().decode(intentThis.getStringExtra("imageString"))
+			}
+			else
+			{
+				null
+			}
+
+			if(intentThis.getStringExtra("imageString") != "")
+			{
+				findViewById<ImageView>(R.id.itemImage).setImageBitmap(BitmapFactory.decodeStream(ByteArrayInputStream(imageByteArray)))
+			}
+
 			findViewById<EditText>(R.id.itemNameText).setText(intentThis.getStringExtra("name"))
 			findViewById<EditText>(R.id.quantityText).setText(intentThis.getIntExtra("quantity", 0).toString())
 			findViewById<EditText>(R.id.expectedPriceText).setText(intentThis.getIntExtra("ePrice", 0).toString())
@@ -99,6 +122,11 @@ class AddActivity : AppCompatActivity()
 		else
 		{
 			findViewById<Button>(R.id.removeButton).visibility = View.INVISIBLE
+
+			findViewById<EditText>(R.id.quantityText).setText("0")
+			findViewById<EditText>(R.id.expectedPriceText).setText("0")
+			findViewById<EditText>(R.id.basePriceText).setText("0")
+
 			edit = false
 		}
 	}
@@ -127,7 +155,8 @@ class AddActivity : AppCompatActivity()
 
 
 
-	private fun dispatchTakePictureIntent() {
+	private fun dispatchTakePictureIntent()
+	{
 		Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
 			takePictureIntent.resolveActivity(packageManager)?.also {
 				startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
@@ -139,6 +168,20 @@ class AddActivity : AppCompatActivity()
 		if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null)
 		{
 			val imageBitmap = data.extras?.get("data") as Bitmap
+
+			val byteOutputStream = ByteArrayOutputStream()
+			imageBitmap.compress(Bitmap.CompressFormat.PNG, 90, byteOutputStream)
+
+			val imageByte = byteOutputStream.toByteArray()
+
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+			{
+				imageString = Base64.getEncoder().encodeToString(imageByte)
+			}
+			else
+			{
+				Log.i("Convert image", "Error version lower than 26")
+			}
 
 			findViewById<ImageView>(R.id.itemImage).setImageBitmap(imageBitmap)
 		}

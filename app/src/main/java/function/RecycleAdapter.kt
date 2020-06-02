@@ -2,6 +2,8 @@ package function
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +15,9 @@ import com.example.warframeaccountant.AddActivity
 import com.example.warframeaccountant.HomeActivity
 import com.example.warframeaccountant.R
 import domin.Item
+import java.io.ByteArrayInputStream
+import java.util.*
+import kotlin.collections.ArrayList
 
 //: RecyclerView.Adapter<>
 class RecycleAdapter(guiClassContext: Context, newItemList: ArrayList<Item>) : RecyclerView.Adapter<RecycleAdapter.ItemViewHolder>()
@@ -85,6 +90,20 @@ class RecycleAdapter(guiClassContext: Context, newItemList: ArrayList<Item>) : R
 	 */
 	override fun onBindViewHolder(holder: ItemViewHolder, position: Int)
 	{
+		val imageByteArray = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		{
+			Base64.getDecoder().decode(itemList[position].imageString)
+		}
+		else
+		{
+			null
+		}
+
+		if(itemList[position].imageString != "")
+		{
+			holder.itemImage.setImageBitmap(BitmapFactory.decodeStream(ByteArrayInputStream(imageByteArray)))
+		}
+
 		holder.itemName.text = itemList[position].name
 		holder.itemBPrice.text = itemList[position].bPrice.toString()
 		holder.itemEPrice.text = itemList[position].ePrice.toString()
