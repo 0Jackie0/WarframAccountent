@@ -300,13 +300,6 @@ class HomeActivity : AppCompatActivity()
 		newIntent.putExtra("edit", true)
 		newIntent.putExtra("id", targetItem.itemId)
 
-		newIntent.putExtra("name", targetItem.name)
-		newIntent.putExtra("quantity", targetItem.number)
-		newIntent.putExtra("ePrice", targetItem.ePrice)
-		newIntent.putExtra("bPrice", targetItem.bPrice)
-		newIntent.putExtra("type", targetItem.type)
-		newIntent.putExtra("imageString", targetItem.imageString)
-
 		startActivityForResult(newIntent, ADD_PAGE_REQUEST_CODE)
 	}
 

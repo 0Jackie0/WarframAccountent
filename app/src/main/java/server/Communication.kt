@@ -18,7 +18,8 @@ import org.json.JSONObject
 
 class Communication(guiContext: Context)
 {
-	private val SERVER_URL = "http://10.0.2.2:28590/api/"
+//	private val SERVER_URL = "http://10.0.2.2:28590/api/"
+	private val SERVER_URL = "http://192.168.1.52:28590/api/"
 
 	private val requestQueue = Volley.newRequestQueue(guiContext)
 
@@ -204,7 +205,7 @@ class Communication(guiContext: Context)
 		val removeItemRequest =
 			JsonObjectRequest(Request.Method.DELETE, "${SERVER_URL}item/remove/$targetId", null, Response.Listener { response ->
 
-				callerClass.deleteItemCallback(response.getInt("itemId"))
+				callerClass.deleteItemCallback(targetId)
 			},
 				Response.ErrorListener { error -> error.printStackTrace() })
 
@@ -226,6 +227,7 @@ class Communication(guiContext: Context)
 				newJson.put("name", item.name)
 				newJson.put("eprice", item.ePrice)
 				newJson.put("bprice", item.bPrice)
+				newJson.put("imageString", item.imageString)
 
 				itemListJsonArray.put(newJson)
 			}

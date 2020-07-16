@@ -5,14 +5,17 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import domin.Item
+import domin.ItemImage
 import domin.Type
 
-@Database(version = 1, entities = [Item::class, Type::class])
+@Database(version = 1, entities = [Item::class, Type::class, ItemImage::class])
 abstract class DatabaseConnection : RoomDatabase()
 {
 	abstract fun getItemRepo(): ItemRepo
 
 	abstract fun getTypeRepo(): TypeRepo
+
+	abstract fun getImageRepo(): ImageRepo
 
 	companion object
 	{

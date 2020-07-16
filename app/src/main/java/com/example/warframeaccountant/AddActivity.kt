@@ -90,36 +90,31 @@ class AddActivity : AppCompatActivity()
 
 		var targetIndex =  setupItemType(intentThis.getIntExtra("type", -1))
 
-		if (intentThis.getBooleanExtra("edit", false))
+		if (intentThis.getBooleanExtra("edit", false))//Edit item
 		{
+			val targetItem = addFunction.getTargetItem(intentThis.getIntExtra("id", -1))
+
 			findViewById<Button>(R.id.removeButton).visibility = View.VISIBLE
 			edit = true
-			id = intentThis.getIntExtra("id", -1)
+			id = targetItem.itemId
 
-			val imageByteArray = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+			if(targetItem.imageString != "" && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 			{
-				Base64.getDecoder().decode(intentThis.getStringExtra("imageString"))
-			}
-			else
-			{
-				null
+				val byteImage = Base64.getDecoder().decode( targetItem.imageString )
+				findViewById<ImageView>(R.id.itemImage).setImageBitmap(BitmapFactory.decodeStream(ByteArrayInputStream( byteImage )))
 			}
 
-			if(intentThis.getStringExtra("imageString") != "")
-			{
-				findViewById<ImageView>(R.id.itemImage).setImageBitmap(BitmapFactory.decodeStream(ByteArrayInputStream(imageByteArray)))
-			}
+			findViewById<EditText>(R.id.itemNameText).setText(targetItem.name)
+			findViewById<EditText>(R.id.quantityText).setText(targetItem.number.toString())
+			findViewById<EditText>(R.id.expectedPriceText).setText(targetItem.ePrice.toString())
+			findViewById<EditText>(R.id.basePriceText).setText(targetItem.bPrice.toString())
 
-			findViewById<EditText>(R.id.itemNameText).setText(intentThis.getStringExtra("name"))
-			findViewById<EditText>(R.id.quantityText).setText(intentThis.getIntExtra("quantity", 0).toString())
-			findViewById<EditText>(R.id.expectedPriceText).setText(intentThis.getIntExtra("ePrice", 0).toString())
-			findViewById<EditText>(R.id.basePriceText).setText(intentThis.getIntExtra("bPrice", 0).toString())
 			if (targetIndex != -1)
 			{
 				findViewById<Spinner>(R.id.itemTypeDropdown).setSelection(targetIndex)
 			}
 		}
-		else
+		else//Add item
 		{
 			findViewById<Button>(R.id.removeButton).visibility = View.INVISIBLE
 
@@ -152,8 +147,6 @@ class AddActivity : AppCompatActivity()
 
 		return targetIndex
 	}
-
-
 
 	private fun dispatchTakePictureIntent()
 	{

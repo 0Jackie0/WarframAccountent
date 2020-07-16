@@ -1,9 +1,11 @@
 package function
 
 import android.content.Context
+import android.util.Log
 import com.example.warframeaccountant.MainActivity
 import database.DatabaseConnection
 import domin.Item
+import domin.ItemImage
 import domin.Type
 import server.Communication
 
@@ -12,6 +14,7 @@ class MainFunction(guiContext: Context)
 	private val guiCass = guiContext
 	private val typeRepo = DatabaseConnection(guiContext).getTypeRepo()
 	private val itemRepo = DatabaseConnection(guiContext).getItemRepo()
+	private val imageRepo = DatabaseConnection(guiContext).getImageRepo()
 
 	private val serverCommunication = Communication(guiContext)
 
@@ -41,6 +44,9 @@ class MainFunction(guiContext: Context)
 	{
 		for (item in itemList)
 		{
+			item.imageId = imageRepo.insert(ItemImage(0, item.imageString)).toInt()
+			item.imageString = ""
+
 			itemRepo.insert(item)
 		}
 		(guiCass as MainActivity).activeButton()
