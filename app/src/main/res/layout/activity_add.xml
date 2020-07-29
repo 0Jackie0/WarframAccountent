@@ -285,4 +285,16 @@
         app:layout_constraintTop_toBottomOf="@+id/priceArea"
         app:layout_constraintVertical_bias="0.93" />
 
+    <TextView
+        android:id="@+id/errorMessageTag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FF0000"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/nameImageArea"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchArea" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

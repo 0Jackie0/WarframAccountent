@@ -30,32 +30,73 @@ class AddActivity : AppCompatActivity()
 
 	fun saveItem (saveButton: View)
 	{
-		val targetType = addFunction.getTargetType(findViewById<Spinner>(R.id.itemTypeDropdown).selectedItem.toString())
-
-		val returnIntent = Intent()
-		if (edit)
+		if(inputValidation())
 		{
-			returnIntent.putExtra("id", id)
-			returnIntent.putExtra("action", "edit")
+			val targetType = addFunction.getTargetType(findViewById<Spinner>(R.id.itemTypeDropdown).selectedItem.toString())
+
+			val returnIntent = Intent()
+			if (edit)
+			{
+				returnIntent.putExtra("id", id)
+				returnIntent.putExtra("action", "edit")
+			}
+			else
+			{
+				returnIntent.putExtra("action", "add")
+			}
+
+			val temp = if(findViewById<TextView>(R.id.quantityText).text.toString() == "")
+			{
+				0
+			}
+			else
+			{
+				findViewById<TextView>(R.id.quantityText).text.toString().toInt()
+			}
+
+			returnIntent.putExtra("name", findViewById<TextView>(R.id.itemNameText).text.toString())
+
+			returnIntent.putExtra("quantity",
+				if(findViewById<TextView>(R.id.quantityText).text.toString() == "")
+					0
+				else
+					findViewById<TextView>(R.id.quantityText).text.toString().toInt()
+			)
+
+			returnIntent.putExtra("ePrice",
+				if(findViewById<TextView>(R.id.expectedPriceText).text.toString() == "")
+					0
+				else
+					findViewById<TextView>(R.id.expectedPriceText).text.toString().toInt()
+			)
+
+			returnIntent.putExtra("bPrice",
+				if(findViewById<TextView>(R.id.basePriceText).text.toString() == "")
+					0
+				else
+					findViewById<TextView>(R.id.basePriceText).text.toString().toInt()
+			)
+
+			returnIntent.putExtra("type", targetType.typeId)
+			returnIntent.putExtra("imageString", imageString)
+
+			findViewById<ImageView>(R.id.itemImage)
+
+
+			setResult(Activity.RESULT_OK, returnIntent)
+
+			this.finish()
 		}
-		else
+	}
+	private fun inputValidation (): Boolean
+	{
+		if(findViewById<TextView>(R.id.itemNameText).text.toString() == "")
 		{
-			returnIntent.putExtra("action", "add")
+			findViewById<TextView>(R.id.errorMessageTag).text = getString(R.string.empty_item_name_error_massage)
+			return false;
 		}
 
-		returnIntent.putExtra("name", findViewById<TextView>(R.id.itemNameText).text.toString())
-		returnIntent.putExtra("quantity", findViewById<TextView>(R.id.quantityText).text.toString().toInt())
-		returnIntent.putExtra("ePrice", findViewById<TextView>(R.id.expectedPriceText).text.toString().toInt())
-		returnIntent.putExtra("bPrice", findViewById<TextView>(R.id.basePriceText).text.toString().toInt())
-		returnIntent.putExtra("type", targetType.typeId)
-		returnIntent.putExtra("imageString", imageString)
-
-		findViewById<ImageView>(R.id.itemImage)
-
-
-		setResult(Activity.RESULT_OK, returnIntent)
-
-		this.finish()
+		return true;
 	}
 
 	fun cancel(cancleButton: View)
