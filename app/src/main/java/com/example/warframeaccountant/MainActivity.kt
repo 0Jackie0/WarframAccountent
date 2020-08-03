@@ -13,7 +13,7 @@ import function.MainFunction
 
 class MainActivity : AppCompatActivity()
 {
-	private val WELLCOME_VIDEO_URL = "http://192.168.1.52:28590/api/video/resource"
+	private val WELLCOME_VIDEO_URL = "http://192.168.1.52:28590/api/video"
 
 	private lateinit var mainFunction: MainFunction
 	private var dataChecked = false
