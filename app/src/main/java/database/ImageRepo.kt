@@ -20,4 +20,7 @@ interface ImageRepo
 
 	@Delete
 	fun delete(vararg targetImage: ItemImage)
+
+	@Query("Delete from itemImage")
+	fun clearTable ()
 }

@@ -40,4 +40,7 @@ interface ItemRepo
 
 	@Delete
 	fun delete(vararg targetItem:Item)
+
+	@Query("Delete from item")
+	fun clearTable ()
 }

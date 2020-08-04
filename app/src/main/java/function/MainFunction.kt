@@ -1,7 +1,6 @@
 package function
 
 import android.content.Context
-import android.util.Log
 import com.example.warframeaccountant.MainActivity
 import database.DatabaseConnection
 import domin.Item
@@ -36,12 +35,41 @@ class MainFunction(guiContext: Context)
 		}
 		else
 		{
-			serverCommunication.pushAllItem(this, itemRepo.getAllItem())
+			serverCommunication.pushAllItem(this, getAllItemList())
 		}
 	}
-
-	fun itemListCallback(itemList: ArrayList<Item>)
+	private fun getAllItemList(order: String = ""): ArrayList<Item>
 	{
+		var itemList: ArrayList<Item> =
+			if (order.equals("name", true))
+			{
+				itemRepo.getAllItemOrderName() as ArrayList<Item>
+			}
+			else if (order.equals("quantity", true))
+			{
+				itemRepo.getAllItemOrderQuantity() as ArrayList<Item>
+			}
+			else
+			{
+				itemRepo.getAllItem() as ArrayList<Item>
+			}
+
+		for(item in itemList)
+		{
+			item.imageString = imageRepo.getImage(item.imageId).imageString
+		}
+
+		return itemList
+	}
+
+	fun itemListCallback(itemList: ArrayList<Item>, isFirstLaugh: Boolean)
+	{
+		if(!isFirstLaugh)
+		{
+			imageRepo.clearTable()
+			itemRepo.clearTable()
+		}
+
 		for (item in itemList)
 		{
 			item.imageId = imageRepo.insert(ItemImage(0, item.imageString)).toInt()
@@ -51,7 +79,6 @@ class MainFunction(guiContext: Context)
 		}
 		(guiCass as MainActivity).activeButton()
 	}
-
 	fun itemTypeListCallback(itemList: ArrayList<Type>, success: Boolean)
 	{
 		val serverCommunicationFile = guiCass.getSharedPreferences("com.example.warframeaccountant", Context.MODE_PRIVATE)
@@ -63,7 +90,7 @@ class MainFunction(guiContext: Context)
 			{
 				typeRepo.insert(type)
 			}
-			serverCommunication.getItemList(this)
+			serverCommunication.getItemList(this, true)
 		}
 		else
 		{
@@ -71,18 +98,34 @@ class MainFunction(guiContext: Context)
 		}
 	}
 
-	fun itemTypeUpdateCallback(success: Boolean)
+	fun itemTypeUpdateCallback(newTypeLise: ArrayList<Type>,success: Boolean)
 	{
 		val serverCommunicationFile = guiCass.getSharedPreferences("com.example.warframeaccountant", Context.MODE_PRIVATE)
 		serverCommunicationFile.edit().putBoolean("Mode", success).apply()
-		(guiCass as MainActivity).activeButton()
+
+		if(success)
+		{
+			for(newType in newTypeLise)
+			{
+				val oldType = typeRepo.getTypeById(newType.typeId.toString())
+
+				if(oldType == null)
+				{
+					typeRepo.insert(newType)
+				}
+				else
+				{
+					oldType.name = newType.name
+					typeRepo.update(oldType)
+				}
+			}
+			serverCommunication.getItemList(this, false)
+		}
 	}
 
 	fun pushAllItemCallback (success: Boolean)
 	{
 		val serverCommunicationFile = guiCass.getSharedPreferences("com.example.warframeaccountant", Context.MODE_PRIVATE)
-
-		(guiCass as MainActivity).activeButton()
 
 		if(success)
 		{
@@ -92,5 +135,7 @@ class MainFunction(guiContext: Context)
 		{
 			serverCommunicationFile.edit().putBoolean("Mode", false).apply()
 		}
+
+		(guiCass as MainActivity).activeButton()
 	}
 }

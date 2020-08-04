@@ -43,8 +43,7 @@ class MainActivity : AppCompatActivity()
 
 		mainFunction = MainFunction(this)
 
-
-		setupVideo();
+		setupVideo()
 		setupFromServer()
 	}
 

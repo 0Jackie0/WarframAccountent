@@ -24,7 +24,7 @@ class Communication(guiContext: Context)
 	private val requestQueue = Volley.newRequestQueue(guiContext)
 
 
-	fun getItemList(callerClass: MainFunction)
+	fun getItemList(callerClass: MainFunction, firstLauch: Boolean)
 	{
 		val itemListRequest =
 			JsonArrayRequest(Request.Method.GET, "${SERVER_URL}item", null, Response.Listener { response ->
@@ -49,7 +49,7 @@ class Communication(guiContext: Context)
 						itemArray.add(newItem)
 					}
 
-					callerClass.itemListCallback(itemArray)
+					callerClass.itemListCallback(itemArray, firstLauch)
 				}
 				catch (e: JSONException)
 				{
@@ -87,7 +87,7 @@ class Communication(guiContext: Context)
 					}
 					else
 					{
-						callerClass.itemTypeUpdateCallback(true)
+						callerClass.itemTypeUpdateCallback(typeArray, true)
 					}
 				}
 				catch (e: JSONException)
@@ -99,7 +99,7 @@ class Communication(guiContext: Context)
 					}
 					else
 					{
-						callerClass.itemTypeUpdateCallback(false)
+						callerClass.itemTypeUpdateCallback(ArrayList<Type>(), false)
 					}
 				}
 			}, Response.ErrorListener { error ->
@@ -110,7 +110,7 @@ class Communication(guiContext: Context)
 				}
 				else
 				{
-					callerClass.itemTypeUpdateCallback(false)
+					callerClass.itemTypeUpdateCallback(ArrayList<Type>(), false)
 				}
 			})
 
