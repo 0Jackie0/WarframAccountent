@@ -146,7 +146,7 @@ class HomeFunction(guiClassContext: Context, appMode: Boolean)
 
 	fun updateAllItemToServer()
 	{
-		serverCommunication.updateAllItem(this, itemRepo.getAllItem())
+		serverCommunication.updateAllItem(this, getAllItemList())
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
