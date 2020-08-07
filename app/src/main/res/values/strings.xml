@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">WarframeAccountant</string>
+    <string name="empty_item_name_error_massage">Item name cannot be empty</string>
+</resources>
